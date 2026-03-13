@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+  --font-gothic: "Yu Gothic", "Noto Sans JP", system-ui, sans-serif;
+  
+  --color-parchment-light: #F5F5DC;
+  --color-parchment-default: #E8DCC4;
+  --color-parchment-dark: #D2B48C;
+  
+  --color-yobel-green: #2D5A27;
+  --color-yobel-gold: #C5A021;
+  --color-yobel-light-green: #E8F5E9;
+  --color-yobel-light-yellow: #FFF9C4;
+}
+
+@layer base {
+  body {
+    @apply font-gothic bg-parchment-light text-yobel-green min-h-screen transition-colors duration-300;
+    background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-black;
+  }
+}
+
+.dark body {
+  @apply bg-zinc-900 text-parchment-light;
+  background-image: none;
+}
+
+.card-shadow {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.yobel-gold-glow {
+  text-shadow: 0 0 10px rgba(197, 160, 33, 0.5);
+}
