@@ -51,15 +51,13 @@ const QuizPage: React.FC<QuizPageProps> = ({ questions, onFinish, onRestart }) =
     setCurrentAnswer((prev) => {
       const next = [...prev];
       
-      // If it's from another slot
       if (item.fromSlot) {
         const sourceIndex = item.originalIndex;
         const targetId = next[targetIndex];
         
         next[targetIndex] = item.id;
-        next[sourceIndex] = targetId; // Swap or null if target was empty
+        next[sourceIndex] = targetId;
       } else {
-        // From character pool
         const existingIdAtTarget = next[targetIndex];
         if (existingIdAtTarget) {
           setAvailableChars(avail => avail.map(a => a.id === existingIdAtTarget ? { ...a, isUsed: false } : a));
@@ -94,7 +92,6 @@ const QuizPage: React.FC<QuizPageProps> = ({ questions, onFinish, onRestart }) =
       return charObj ? charObj.char : '';
     }).join('');
 
-    // Normalize for comparison (handle hidden chars or slightly different unicode)
     const normalize = (str: string) => str.normalize('NFKC').trim();
 
     if (normalize(userAnswer) === normalize(currentQuestion.answer)) {
@@ -142,35 +139,35 @@ const QuizPage: React.FC<QuizPageProps> = ({ questions, onFinish, onRestart }) =
         </button>
       </div>
 
-      {/* Question Area */}
-      <div className="bg-white/40 backdrop-blur-sm p-8 rounded-3xl card-shadow border-4 border-yobel-green/10 mb-8">
+      {/* Question Area - 羊皮紙風背景に変更 */}
+      <div className="bg-gradient-to-br from-amber-50 to-yellow-50 backdrop-blur-sm p-8 rounded-3xl card-shadow border-4 border-yobel-green/20 mb-8">
         <div className="flex justify-between items-start mb-4">
-          <div className="text-yobel-green/60 text-lg font-black px-2">
+          <div className="text-yobel-green/70 text-lg font-black px-2">
             【{currentQuestion.category}】
           </div>
         </div>
 
         {currentQuestion.caption && (
-          <div className="text-xl md:text-2xl font-black text-zinc-600 mb-2 px-2 italic">
+          <div className="text-xl md:text-2xl font-black text-amber-800 mb-2 px-2 italic">
             {currentQuestion.caption}
           </div>
         )}
 
-        <h3 className="text-2xl md:text-4xl font-black mb-6 leading-relaxed">
+        <h3 className="text-2xl md:text-4xl font-black mb-6 leading-relaxed text-emerald-950">
           {currentQuestion.problemText}
         </h3>
         
         {isCorrect && (
-          <div className="animate-bounce mb-6">
-            <div className="inline-flex items-center gap-3 bg-yobel-gold text-white px-8 py-3 rounded-full text-2xl font-black card-shadow">
-              <CheckCircle2 size={32} /> 正解！ {currentQuestion.reading}
+          <div className="animate-bounce mb-6 text-center">
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-amber-100 to-yellow-100 text-emerald-900 px-8 py-4 rounded-full text-2xl font-black card-shadow border-2 border-amber-300">
+              <CheckCircle2 size={32} className="text-emerald-700" /> 正解！ {currentQuestion.reading}
             </div>
             {currentQuestion.caption && (
-              <div className="mt-4 text-xl font-black text-zinc-600">
+              <div className="mt-4 text-xl font-black text-amber-800">
                 {currentQuestion.caption}
               </div>
             )}
-            <div className="mt-2 text-2xl font-black text-yobel-gold yobel-gold-glow">
+            <div className="mt-3 text-2xl font-black text-amber-900">
               要した時間： {formatTime(timeTaken || 0)}
             </div>
           </div>
@@ -196,7 +193,7 @@ const QuizPage: React.FC<QuizPageProps> = ({ questions, onFinish, onRestart }) =
 
         {/* Character Pool */}
         {!isCorrect && (
-          <div className="flex flex-wrap justify-center gap-3 p-6 bg-white/30 rounded-2xl border-2 border-dashed border-yobel-green/20">
+          <div className="flex flex-wrap justify-center gap-3 p-6 bg-white/20 rounded-2xl border-2 border-dashed border-amber-300">
             {availableChars.map((item, i) => (
               !item.isUsed && (
                 <DraggableCard
@@ -218,7 +215,7 @@ const QuizPage: React.FC<QuizPageProps> = ({ questions, onFinish, onRestart }) =
             <button
               onClick={checkAnswer}
               disabled={currentAnswer.some(a => a === null)}
-              className="bg-yobel-green text-white px-10 py-4 rounded-2xl text-2xl font-black card-shadow hover:bg-yobel-green/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-emerald-700 text-white px-10 py-4 rounded-2xl text-2xl font-black card-shadow hover:bg-emerald-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               チェック！
             </button>
@@ -230,8 +227,8 @@ const QuizPage: React.FC<QuizPageProps> = ({ questions, onFinish, onRestart }) =
                   className={cn(
                     "px-4 py-2 rounded-xl font-black transition-all border-2",
                     hintsUsed > i 
-                      ? "bg-yobel-gold text-white border-yobel-gold" 
-                      : "bg-white text-yobel-green border-yobel-green/20 hover:border-yobel-green"
+                      ? "bg-amber-600 text-white border-amber-600" 
+                      : "bg-amber-50 text-emerald-900 border-amber-300 hover:border-amber-500"
                   )}
                 >
                   ヒント {i + 1}
@@ -242,7 +239,7 @@ const QuizPage: React.FC<QuizPageProps> = ({ questions, onFinish, onRestart }) =
         ) : (
           <button
             onClick={nextQuestion}
-            className="group bg-yobel-gold text-white px-12 py-5 rounded-2xl text-2xl font-black card-shadow hover:bg-yobel-gold/90 transition-all flex items-center gap-3"
+            className="group bg-gradient-to-r from-amber-500 to-amber-600 text-white px-12 py-5 rounded-2xl text-2xl font-black card-shadow hover:from-amber-600 hover:to-amber-700 transition-all flex items-center gap-3 shadow-lg"
           >
             次へ <ChevronRight className="group-hover:translate-x-1 transition-transform" />
           </button>
@@ -253,22 +250,23 @@ const QuizPage: React.FC<QuizPageProps> = ({ questions, onFinish, onRestart }) =
       {hintsUsed > 0 && (
         <div className="mt-8 space-y-2 max-w-lg mx-auto">
           {currentQuestion.hints.slice(0, hintsUsed).map((hint, i) => (
-            <div key={i} className="flex items-center gap-3 bg-white/60 p-4 rounded-xl border-l-8 border-yobel-gold font-bold animate-in slide-in-from-left-4">
-              <HelpCircle className="text-yobel-gold shrink-0" />
+            <div key={i} className="flex items-center gap-3 bg-amber-50 p-4 rounded-xl border-l-8 border-amber-400 font-bold animate-in slide-in-from-left-4 text-emerald-900">
+              <HelpCircle className="text-amber-600 shrink-0" />
               <span>{hint}</span>
             </div>
           ))}
         </div>
       )}
-      {/* Incorrect Feedback Overlay */}
+
+      {/* Incorrect Feedback Overlay - 白→薄黄に変更 */}
       {showIncorrect && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-white rounded-3xl p-8 max-w-sm w-full card-shadow border-4 border-red-200 text-center animate-in zoom-in-95 duration-300">
+          <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-3xl p-8 max-w-sm w-full card-shadow border-4 border-red-200 text-center animate-in zoom-in-95 duration-300">
             <div className="text-6xl mb-4">🤔</div>
-            <h2 className="text-2xl font-black text-zinc-800 mb-4">？ もう一度よく見直して・・</h2>
+            <h2 className="text-2xl font-black text-emerald-950 mb-4">？ もう一度よく見直して・・</h2>
             <button
               onClick={() => setShowIncorrect(false)}
-              className="bg-yobel-green text-white px-8 py-3 rounded-2xl text-xl font-black card-shadow hover:bg-yobel-green/90 transition-all w-full"
+              className="bg-emerald-700 text-white px-8 py-3 rounded-2xl text-xl font-black card-shadow hover:bg-emerald-800 transition-all w-full"
             >
               OK
             </button>
