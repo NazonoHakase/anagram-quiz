@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';  // ← useEffect を削除
 import { Link } from 'react-router-dom';
 import type { Question, Category } from '../types';
 import { Plus, Trash2, Edit3, Lock, Unlock, X, Save, FolderTree } from 'lucide-react';

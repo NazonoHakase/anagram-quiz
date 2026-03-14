@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useDrop, useDrag } from 'react-dnd';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -16,6 +16,8 @@ interface DropSlotProps {
 }
 
 const DropSlot: React.FC<DropSlotProps> = ({ index, char, charId, isCorrect, onDrop }) => {
+  const ref = useRef<HTMLDivElement>(null);
+
   const [{ isOver }, drop] = useDrop(() => ({
     accept: 'CARD',
     drop: (item: { id: string, char: string, originalIndex: number, fromSlot?: boolean }) => onDrop(item, index),
@@ -33,9 +35,11 @@ const DropSlot: React.FC<DropSlotProps> = ({ index, char, charId, isCorrect, onD
     canDrag: !!charId && !isCorrect,
   }), [charId, char, index, isCorrect]);
 
+  drag(drop(ref));
+
   return (
     <div
-      ref={(node) => drag(drop(node))}
+      ref={ref}
       className={cn(
         "w-12 h-14 md:w-16 md:h-20 rounded-lg border-2 border-dashed transition-all flex items-center justify-center cursor-move",
         isOver || isDragging ? "bg-lime-300 border-lime-500 scale-x-105" : "bg-black/5 border-black/10",
