@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Question, Category } from '../types';
-import { Plus, Trash2, Edit3, Lock, Unlock, X, Save, FolderTree } from 'lucide-react';
+
+// lucide-react のアイコンをまとめて1行でインポート
+import { Plus, Trash2, Edit3, Unlock, X, Save, FolderTree } from 'lucide-react';
 
 interface AdminPageProps {
   questions: Question[];

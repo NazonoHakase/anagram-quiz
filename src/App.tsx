@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// import React, { useState, useEffect } from 'react';  ← これを削除またはコメントアウト
+import { useState, useEffect } from 'react';  // これに変更
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';

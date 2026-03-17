@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/components/draggablecard.tsx","./src/components/dropslot.tsx","./src/components/timer.tsx","./src/data/questions.ts","./src/pages/adminpage.tsx","./src/pages/homepage.tsx","./src/pages/quizpage.tsx","./src/types/index.ts"],"version":"5.9.3"}
