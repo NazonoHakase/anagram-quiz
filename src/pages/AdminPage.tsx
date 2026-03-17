@@ -15,7 +15,6 @@ const AdminPage: React.FC<AdminPageProps> = ({ questions, onUpdateQuestions, cat
   const [error, setError] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // モーダル関連状態（これが欠けていると開かない）
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<Partial<Question> | null>(null);
@@ -34,7 +33,6 @@ const AdminPage: React.FC<AdminPageProps> = ({ questions, onUpdateQuestions, cat
     hints: ['', '', '']
   });
 
-  // ログイン処理（変更なし）
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (password.trim() === 'yobel') {
@@ -47,7 +45,6 @@ const AdminPage: React.FC<AdminPageProps> = ({ questions, onUpdateQuestions, cat
     }
   };
 
-  // 新規/編集モーダルを開く
   const openModal = (question?: Question) => {
     if (question) {
       setEditingQuestion(question);
@@ -71,7 +68,6 @@ const AdminPage: React.FC<AdminPageProps> = ({ questions, onUpdateQuestions, cat
   const closeModal = () => {
     setIsModalOpen(false);
     setEditingQuestion(null);
-    setFormData({}); // リセット
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -115,7 +111,6 @@ const AdminPage: React.FC<AdminPageProps> = ({ questions, onUpdateQuestions, cat
     }
   };
 
-  // カテゴリ管理
   const handleAddCategory = () => {
     if (!newCategoryName.trim()) return;
     const newCat: Category = { id: String(Date.now()), name: newCategoryName.trim() };
@@ -134,13 +129,12 @@ const AdminPage: React.FC<AdminPageProps> = ({ questions, onUpdateQuestions, cat
   };
 
   const handleDeleteCategory = (cat: Category) => {
-    if (window.confirm(`カテゴリ「${cat.name}」を削除しますか？`)) {
+    if (window.confirm(`カテゴリ「${cat.name}」を削除しますか？\n※このカテゴリに属する問題のカテゴリ設定が空になります。`)) {
       onUpdateCategories(categories.filter(c => c.id !== cat.id));
       onUpdateQuestions(questions.map(q => q.category === cat.name ? { ...q, category: '' } : q));
     }
   };
 
-  // ログイン画面
   if (!isAuthenticated && localStorage.getItem('yobel_admin') !== 'true') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-50 flex items-center justify-center p-4">
@@ -170,7 +164,6 @@ const AdminPage: React.FC<AdminPageProps> = ({ questions, onUpdateQuestions, cat
     );
   }
 
-  // 管理画面本体
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -199,7 +192,6 @@ const AdminPage: React.FC<AdminPageProps> = ({ questions, onUpdateQuestions, cat
         </div>
       </div>
 
-      {/* 問題一覧テーブル */}
       <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-amber-200/50 overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead>
@@ -468,6 +460,31 @@ const AdminPage: React.FC<AdminPageProps> = ({ questions, onUpdateQuestions, cat
           </div>
         </div>
       )}
+      {/* データ反映用ボタン（最下部に追加） */}
+<div className="mt-12 pt-8 border-t border-amber-300 text-center">
+  <p className="text-lg font-medium text-emerald-800 mb-4">
+    変更が終わったら、このボタンを押してデータをコピーしてください
+  </p>
+  <button
+    type="button"
+    onClick={() => {
+      const jsonString = JSON.stringify(questions, null, 2);
+      navigator.clipboard.writeText(jsonString);
+      alert(
+        '現在の問題データをクリップボードにコピーしました！\n\n' +
+        '次にすること：\n' +
+        '1. VS Codeなどで src/data/questions.ts を開く\n' +
+        '2. export const initialQuestions: Question[] = [ ... ] の [ ... ] の中身を\n' +
+        '   コピーした内容で置き換え\n' +
+        '3. 保存 → git commit -m "update questions" → git push\n' +
+        '→ 他のユーザーにも反映されます'
+      );
+    }}
+    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-xl text-lg shadow-lg transition-all inline-flex items-center gap-2"
+  >
+    <Save size={20} /> 今のデータをコピー（反映用）
+  </button>
+</div>
     </div>
   );
 };

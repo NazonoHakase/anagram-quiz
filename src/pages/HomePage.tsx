@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import type { Category } from '../types';
 
 interface HomePageProps {
@@ -8,13 +7,6 @@ interface HomePageProps {
 }
 
 const HomePage: React.FC<HomePageProps> = ({ categories, onSelectCategory }) => {
-  const navigate = useNavigate();
-
-  const handleSelect = (category: string) => {
-    onSelectCategory(category);
-    navigate('/quiz');
-  };
-
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] p-4 text-center">
       <h2 className="text-3xl md:text-5xl font-black mb-4 text-yobel-green">
@@ -28,7 +20,7 @@ const HomePage: React.FC<HomePageProps> = ({ categories, onSelectCategory }) => 
         {categories.map((cat) => (
           <button
             key={cat.id}
-            onClick={() => handleSelect(cat.name)}
+            onClick={() => onSelectCategory(cat.name)}
             className={`
               relative overflow-hidden
               bg-gradient-to-br from-amber-50/80 to-yellow-50/60
@@ -49,7 +41,6 @@ const HomePage: React.FC<HomePageProps> = ({ categories, onSelectCategory }) => 
               {cat.name}
             </span>
 
-            {/* ホバー時の光沢オーバーレイ */}
             <div 
               className="
                 absolute inset-0 
